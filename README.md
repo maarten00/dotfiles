@@ -51,6 +51,7 @@ After backing up your old Mac you may now follow these install instructions to s
 
 5. Start `Herd.app` and run its install process
 6. After mackup is synced with your cloud storage, restore preferences by running `mackup restore`
+7. Download the Iterm2 theme to your downloads folder. The color settings can be imported into iTerm2. Apply them in iTerm through iTerm → preferences → profiles → colors → load presets. You can create a different profile other than Default if you wish to do so.
 7. Restart your computer to finalize the process
 
 Your Mac is now ready to use!
