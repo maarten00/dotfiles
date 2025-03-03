@@ -11,6 +11,7 @@ brew 'gh'
 brew 'git'
 brew 'grep'
 brew 'httpie'
+brew 'atuin'
 
 # Development
 brew 'imagemagick'
