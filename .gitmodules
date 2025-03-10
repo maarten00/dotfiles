@@ -9,7 +9,7 @@
 	url = git@github.com:zsh-users/zsh-autosuggestions.git
 [submodule "plugins/zsh-autocomplete"]
 	path = plugins/zsh-autocomplete
-	url = git@github.com:zsh-users/zsh-autocomplete.git
+	url = git@github.com:marlonrichert/zsh-autocomplete.git
 [submodule "plugins/fast-syntax-highlighting"]
 	path = plugins/fast-syntax-highlighting
 	url = git@github.com:zdharma-continuum/fast-syntax-highlighting.git
