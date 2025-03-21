@@ -11,10 +11,11 @@ brew 'gh'
 brew 'git'
 brew 'grep'
 brew 'httpie'
-brew 'atuin'
 
 # Development
 brew 'imagemagick'
+brew 'atuin'
+brew 'terminal-notifier'
 
 # Apps
 cask '1password'

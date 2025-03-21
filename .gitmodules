@@ -13,3 +13,6 @@
 [submodule "plugins/fast-syntax-highlighting"]
 	path = plugins/fast-syntax-highlighting
 	url = git@github.com:zdharma-continuum/fast-syntax-highlighting.git
+[submodule "plugins/notify"]
+	path = plugins/notify
+	url = git@github.com:marzocchi/zsh-notify.git
