@@ -4,7 +4,7 @@ alias reloaddns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
 alias ll="/opt/homebrew/opt/coreutils/libexec/gnubin/ls -AhlFo --color --group-directories-first"
 alias phpstorm='open -a /Applications/PhpStorm.app "`pwd`"'
 alias xo='xdebug.sh on'
-alias xx='xdebug.sh on'
+alias xx='xdebug.sh off'
 
 # Directories
 alias dotfiles="cd $DOTFILES"
