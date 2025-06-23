@@ -10,6 +10,8 @@ alias xx='xdebug.sh off'
 alias dotfiles="cd $DOTFILES"
 
 # Laravel
+alias tink="rlwrap php artisan tinker"
+alias pa="php artisan"
 
 # PHP
 alias cfresh="rm -rf vendor/ composer.lock && composer i"
@@ -36,3 +38,7 @@ alias resolve="git add . && git commit --no-edit"
 alias stash="git stash -u"
 alias unstage="git restore --staged ."
 alias wip="commit wip"
+
+# Other
+alias cs="./tools/changed-files fix-style"
+alias tr="./tools/refresh"
