@@ -116,3 +116,8 @@ export LANG=en_US.UTF-8
 . "$HOME/.atuin/bin/env"
 
 eval "$(atuin init zsh)"
+
+# Set the default directory after opening a ssh session for the user "dev" but not when opening a screen
+if [[ $USER == "dev" && -z $STY ]]; then
+    cd /home/dev/repositories/backend/
+fi
