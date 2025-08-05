@@ -12,6 +12,7 @@ alias dotfiles="cd $DOTFILES"
 # Laravel
 alias tink="rlwrap php artisan tinker"
 alias pa="php artisan"
+alias pac="pa cache:clear"
 
 # PHP
 alias cfresh="rm -rf vendor/ composer.lock && composer i"
@@ -42,3 +43,4 @@ alias wip="commit wip"
 # Other
 alias cs="./tools/changed-files fix-style"
 alias tr="./tools/refresh"
+alias fesy="/home/dev/fesync.sh"
