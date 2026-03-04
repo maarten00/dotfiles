@@ -7,6 +7,8 @@ export DOTFILES=$HOME/.dotfiles
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
+export NVM_DIR="$HOME/.nvm"
+
 # Minimal - Theme Settings
 export MNML_INSERT_CHAR="$"
 export MNML_PROMPT=(mnml_git mnml_keymap)
@@ -116,6 +118,9 @@ export LANG=en_US.UTF-8
 . "$HOME/.atuin/bin/env"
 
 eval "$(atuin init zsh)"
+
+[ -s "$(brew --prefix nvm)/nvm.sh" ] && \. "$(brew --prefix nvm)/nvm.sh"
+[ -s "$(brew --prefix nvm)/etc/bash_completion.d/nvm" ] && \. "$(brew --prefix nvm)/etc/bash_completion.d/nvm"
 
 # Set the default directory after opening a ssh session for the user "dev" but not when opening a screen
 if [[ $USER == "dev" && -z $STY ]]; then
