@@ -40,11 +40,15 @@ alias stash="git stash -u"
 alias unstage="git restore --staged ."
 alias wip="commit wip"
 
-# Other
-alias cs="./tools/changed-files fix-style"
+# Devbox
+if [[ $USER == "dev" ]]; then
+  alias cs="./tools/changed-files fix-style"
 alias tr="./tools/refresh"
-alias fesy="/home/dev/fesync.sh"
-alias big-eaters="ncdu /home/dev"
+  alias fesy="/home/dev/fesync.sh"
+  alias big-eaters="ncdu /home/dev"
+fi
+
+# Other
 alias kb="sudo pkill -f Boom; sleep 1; open \"/Applications/Boom 3D.app\""
 
 enable-art() {
