@@ -17,6 +17,9 @@ brew 'nvm'
 brew 'imagemagick'
 brew 'atuin'
 brew 'terminal-notifier'
+brew 'libyaml'
+brew 'nvm'
+brew 'php'
 
 # Apps
 cask '1password'
