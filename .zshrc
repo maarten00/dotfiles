@@ -126,3 +126,7 @@ eval "$(atuin init zsh)"
 if [[ $USER == "dev" && -z $STY ]]; then
     cd /home/dev/repositories/backend/
 fi
+
+# opencode
+export PATH=/home/dev/.opencode/bin:$PATH
+export PATH="$HOME/.local/bin:$PATH"
