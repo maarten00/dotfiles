@@ -82,7 +82,7 @@ ZSH_CUSTOM=$DOTFILES
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(artisan git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting zsh-autocomplete)
 
-if [[ $USER == "maarten" ]]; then
+if [[ $USER == "maarten" && $TERM_PROGRAM == "iTerm.app" ]]; then
     plugins+=(notify)
 fi
 
