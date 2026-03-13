@@ -80,8 +80,17 @@ ZSH_CUSTOM=$DOTFILES
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(artisan git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting zsh-autocomplete)
+plugins=(
+  git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  fast-syntax-highlighting
+  zsh-autocomplete
+)
 
+if [[ -f ~/.config/zsh/enable-artisan-plugin ]]; then
+  plugins+=(artisan)
+fi
 if [[ $USER == "maarten" && $TERM_PROGRAM == "iTerm.app" ]]; then
     plugins+=(notify)
 fi

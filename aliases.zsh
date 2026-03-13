@@ -46,3 +46,14 @@ alias tr="./tools/refresh"
 alias fesy="/home/dev/fesync.sh"
 alias big-eaters="ncdu /home/dev"
 alias kb="sudo pkill -f Boom; sleep 1; open \"/Applications/Boom 3D.app\""
+
+enable-art() {
+  mkdir -p ~/.config/zsh
+  touch ~/.config/zsh/enable-artisan-plugin
+  exec zsh
+}
+
+disable-art() {
+  rm -f ~/.config/zsh/enable-artisan-plugin
+  exec zsh
+}
