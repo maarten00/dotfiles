@@ -119,8 +119,10 @@ export LANG=en_US.UTF-8
 
 eval "$(atuin init zsh)"
 
-[ -s "$(brew --prefix nvm)/nvm.sh" ] && \. "$(brew --prefix nvm)/nvm.sh"
-[ -s "$(brew --prefix nvm)/etc/bash_completion.d/nvm" ] && \. "$(brew --prefix nvm)/etc/bash_completion.d/nvm"
+if [[ $USER == "maarten" ]]; then
+    [ -s "$(brew --prefix nvm)/nvm.sh" ] && \. "$(brew --prefix nvm)/nvm.sh"
+    [ -s "$(brew --prefix nvm)/etc/bash_completion.d/nvm" ] && \. "$(brew --prefix nvm)/etc/bash_completion.d/nvm"
+fi
 
 # Set the default directory after opening a ssh session for the user "dev" but not when opening a screen
 if [[ $USER == "dev" && -z $STY ]]; then
