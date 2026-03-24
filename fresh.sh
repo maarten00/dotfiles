@@ -16,8 +16,11 @@ if test ! $(which brew); then
 fi
 
 # Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
-rm -rf $HOME/.zshrc
-ln -sw $HOME/.dotfiles/.zshrc $HOME/.zshrc
+ln -sfn "$HOME/.dotfiles/.zshrc" "$HOME/.zshrc"
+
+# Symlink the Ghostty config from the .dotfiles
+mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
+ln -sfn "$HOME/.dotfiles/ghostty/config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
 # Update Homebrew recipes
 brew update

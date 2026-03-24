@@ -37,6 +37,8 @@ After backing up your old Mac you may now follow these install instructions to s
     cd ~/.dotfiles && ./fresh.sh
     ```
 
+   This will also symlink your tracked Ghostty config from [`ghostty/config`](./ghostty/config) to `~/Library/Application Support/com.mitchellh.ghostty/config`.
+
 5. Download the Iterm2 theme to your downloads folder. The color settings can be imported into iTerm2. Apply them in iTerm through iTerm → preferences → profiles → colors → load presets. You can create a different profile other than Default if you wish to do so.
 6. Restart your computer to finalize the process
 
