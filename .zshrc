@@ -132,3 +132,6 @@ eval "$(atuin init zsh)"
 if [[ $USER == "dev" && -z $STY ]]; then
     cd /home/dev/repositories/backend/
 fi
+
+# Source local overrides (not tracked in VCS)
+[[ -f $DOTFILES/.zshrc.local ]] && source $DOTFILES/.zshrc.local
