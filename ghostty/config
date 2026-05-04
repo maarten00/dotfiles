@@ -29,6 +29,9 @@ window-padding-color = extend
 
 unfocused-split-opacity = 0.6
 
+# Fix for Claude opt+p for model switch
+macos-option-as-alt = true
+
 # =========================
 # Pane navigation
 # =========================
