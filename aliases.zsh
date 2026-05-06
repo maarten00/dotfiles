@@ -43,7 +43,8 @@ alias wip="commit wip"
 # Devbox
 if [[ $USER == "dev" ]]; then
   alias cs="./tools/changed-files fix-style"
-alias tr="./tools/refresh"
+  alias tr="./tools/refresh"
+  alias act="php artisan action:execute --job=actions && php artisan action:execute --job=pending_chains"
   alias fesy="/home/dev/fesync.sh"
   alias big-eaters="ncdu /home/dev"
 fi
