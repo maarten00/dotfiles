@@ -125,8 +125,8 @@ export LANG=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-. "$HOME/.atuin/bin/env"
-
+# Only load env file if it exists
+[[ -f "$HOME/.atuin/bin/env" ]] && . "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
 
 # Set the default directory after opening a ssh session for the user "dev" but not when opening a screen
