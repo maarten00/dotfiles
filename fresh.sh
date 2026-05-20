@@ -22,6 +22,13 @@ ln -sfn "$HOME/.dotfiles/.zshrc" "$HOME/.zshrc"
 mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
 ln -sfn "$HOME/.dotfiles/ghostty/config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
+# Make the 1Password SSH agent socket available to GUI apps like JetBrains Toolbox
+mkdir -p "$HOME/Library/LaunchAgents"
+ln -sfn "$HOME/.dotfiles/macos/launch-agents/com.maarten.ssh-auth-sock.plist" "$HOME/Library/LaunchAgents/com.maarten.ssh-auth-sock.plist"
+launchctl bootout "gui/$(id -u)" "$HOME/Library/LaunchAgents/com.maarten.ssh-auth-sock.plist" >/dev/null 2>&1 || true
+launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/com.maarten.ssh-auth-sock.plist"
+launchctl kickstart -k "gui/$(id -u)/com.maarten.ssh-auth-sock"
+
 # Update Homebrew recipes
 brew update
 
