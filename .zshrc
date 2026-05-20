@@ -1,5 +1,6 @@
 # Path to your dotfiles.
 export DOTFILES=$HOME/.dotfiles
+export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
