@@ -1,3 +1,4 @@
+theme = dark:Catppuccin Mocha,light:Dayfox
 font-family = "MonoLisa Variable"
 #font-feature = +ss02
 font-size = 14
