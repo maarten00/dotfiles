@@ -22,6 +22,10 @@ ln -sfn "$HOME/.dotfiles/.zshrc" "$HOME/.zshrc"
 mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
 ln -sfn "$HOME/.dotfiles/ghostty/config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
+# Symlink the global Claude Code instructions from the .dotfiles
+mkdir -p "$HOME/.claude"
+ln -sfn "$HOME/.dotfiles/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
+
 # Make the 1Password SSH agent socket available to GUI apps like JetBrains Toolbox
 mkdir -p "$HOME/Library/LaunchAgents"
 ln -sfn "$HOME/.dotfiles/macos/launch-agents/com.maarten.ssh-auth-sock.plist" "$HOME/Library/LaunchAgents/com.maarten.ssh-auth-sock.plist"
