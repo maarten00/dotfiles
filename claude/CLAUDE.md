@@ -25,10 +25,8 @@ followed by a heading with a check emoji, then the conclusion:
 
     ---
 
-    ## ✅ Conclusie
+    ## ✅ Conclusion
 
-- The heading text follows the reply language: `## ✅ Conclusie` (Dutch),
-  `## ✅ Conclusion` (English).
 - Keep the research/steps above intact — he still wants to see them; the marker
   is only a visual cue for where to start reading, not a signal to trim.
 - Skip the marker for short, direct answers (a one-liner, a simple lookup) —
