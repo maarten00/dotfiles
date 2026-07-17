@@ -18,6 +18,9 @@ fi
 # Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
 ln -sfn "$HOME/.dotfiles/.zshrc" "$HOME/.zshrc"
 
+# Symlink the .zshenv file from the .dotfiles
+ln -sfn "$HOME/.dotfiles/.zshenv" "$HOME/.zshenv"
+
 # Symlink the Ghostty config from the .dotfiles
 mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
 ln -sfn "$HOME/.dotfiles/ghostty/config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
