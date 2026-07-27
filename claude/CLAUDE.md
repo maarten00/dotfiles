@@ -14,6 +14,21 @@ The Agent tool's `model` param takes only a family (sonnet/opus/haiku/fable), no
 
 **Keep delegated work from orphaning.** Fan out breadth from the main loop, where I hold the task ids and can stop them — don't have a subagent spawn its *own* background children, because those grandchildren orphan as "Running" tasks that the main loop's TaskList/TaskStop can't see or stop, and they pile up in the Background-tasks panel. Tell a subagent to do its sub-work inline (no nested fan-out). And never claim "nothing is running" off an empty TaskList — that only shows the work-list, not agents a subagent spawned a level down; if asked, say those can be cleared from the Background-tasks panel.
 
+## Reasoning effort
+
+Work at the session's current effort level by default — don't second-guess it for
+every task. But if the current effort is clearly wrong for what I've asked, stop
+before doing the work, say so, and tell me which level to switch to and why:
+
+- **Too low** — the task needs deeper reasoning than the current level can give
+  (subtle correctness analysis, architectural trade-offs, tricky debugging), so
+  the answer would likely be shallow or wrong.
+- **Too high** — the task is mechanical or trivial (a one-line edit, a lookup, a
+  rename) and the current level just burns tokens and time.
+
+Don't silently compensate and don't just proceed with a caveat — stop and let me
+decide, since only I can change the effort level (`/effort`).
+
 ## Mark where the answer starts
 
 Maarten finds it hard to tell where my research stops and my real answer
