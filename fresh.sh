@@ -29,6 +29,12 @@ ln -sfn "$HOME/.dotfiles/ghostty/config" "$HOME/Library/Application Support/com.
 mkdir -p "$HOME/.claude"
 ln -sfn "$HOME/.dotfiles/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
+# Symlink the Claude Code skills from the .dotfiles (leaves machine-local skills untouched)
+mkdir -p "$HOME/.claude/skills"
+for skill in "$HOME/.dotfiles/claude/skills/"*.md; do
+  ln -sfn "$skill" "$HOME/.claude/skills/$(basename "$skill")"
+done
+
 # Make the 1Password SSH agent socket available to GUI apps like JetBrains Toolbox
 mkdir -p "$HOME/Library/LaunchAgents"
 ln -sfn "$HOME/.dotfiles/macos/launch-agents/com.maarten.ssh-auth-sock.plist" "$HOME/Library/LaunchAgents/com.maarten.ssh-auth-sock.plist"
