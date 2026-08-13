@@ -24,6 +24,6 @@ To the point and punctual. Keep each comment as short as possible while still gi
 Always end the comment with a footnote marking it as an automated Claude comment. Use a small italic note on its own line, separated by a rule:
 
     ---
-    _🤖 Automatische comment gegenereerd door Claude._
+    🤖 _Automatische comment gegenereerd door Claude._
 
 This footnote is mandatory on every comment — never omit it.
