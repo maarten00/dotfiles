@@ -30,10 +30,11 @@ mkdir -p "$HOME/.claude"
 ln -sfn "$HOME/.dotfiles/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
 # Symlink the Claude Code skills from the .dotfiles (leaves machine-local skills untouched)
-mkdir -p "$HOME/.claude/skills"
-for skill in "$HOME/.dotfiles/claude/skills/"*.md; do
-  ln -sfn "$skill" "$HOME/.claude/skills/$(basename "$skill")"
-done
+sh "$HOME/.dotfiles/claude/link-skills.sh"
+
+# Route this repo's git hooks to the tracked git-hooks directory, so pulling new
+# skills re-links them automatically (see git-hooks/post-merge)
+git -C "$HOME/.dotfiles" config core.hooksPath "$HOME/.dotfiles/git-hooks"
 
 # Make the 1Password SSH agent socket available to GUI apps like JetBrains Toolbox
 mkdir -p "$HOME/Library/LaunchAgents"

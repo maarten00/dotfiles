@@ -1,0 +1,6 @@
+#!/bin/sh
+# Runs after history is rewritten (e.g. `git pull --rebase`, `git rebase`,
+# `git commit --amend`). Re-links Claude Code skills so skills that arrive via a
+# rebased pull are picked up too (post-merge does not fire on rebase pulls).
+
+exec "$HOME/.dotfiles/claude/link-skills.sh"

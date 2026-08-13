@@ -1,0 +1,6 @@
+#!/bin/sh
+# Runs after `git pull` / `git merge`. Re-links Claude Code skills so newly
+# pulled skills are picked up automatically. (Note: `git pull --rebase` does
+# not trigger post-merge.)
+
+exec "$HOME/.dotfiles/claude/link-skills.sh"
