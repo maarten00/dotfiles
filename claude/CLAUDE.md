@@ -56,24 +56,15 @@ for me to concentrate on — say it once, clearly, then stop.
 
 ## GitHub PR review comments
 
-When reviewing a GitHub PR and placing comments (inline or general), follow this
-for every comment. Applies to both Claude CLI and Claude Desktop.
+When reviewing a GitHub PR and placing comments (inline or general), follow the
+`pr-comments` skill at `~/.claude/skills/pr-comments.md` for every comment — it
+defines the required language, style, and the mandatory "automated Claude
+comment" footnote. Load and apply it whenever you start drafting or posting PR
+review comments.
 
-- **Language:** Write in Dutch, but keep English programming terms where that
-  reads naturally (`race condition`, `nullable`, `type hint`, `edge case`,
-  etc.). Don't hard-translate terms that don't have a sensible Dutch equivalent —
-  forced translations hurt readability more than they help.
-- **Style:** To the point and punctual. Keep each comment as short as possible
-  while still giving enough detail to pin down the issue — name the concrete
-  problem and where it bites, skip the throat-clearing.
-- **Footnote:** Always end the comment with a footnote marking it as an
-  automated Claude comment. Use a small italic note on its own line, separated
-  by a rule:
-
-      ---
-      _🤖 Automatische comment gegenereerd door Claude._
-
-  This footnote is mandatory on every comment — never omit it.
+The detail lives in the skill (not here) on purpose: its rule to write PR
+comments in Dutch must NOT leak into normal chat replies, which stay in the
+language I'm prompting in.
 
 ## Fixing PR issues
 
