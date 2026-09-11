@@ -66,6 +66,19 @@ The detail lives in the skill (not here) on purpose: its rule to write PR
 comments in Dutch must NOT leak into normal chat replies, which stay in the
 language I'm prompting in.
 
+## Creating pull requests
+
+When opening a GitHub pull request (or writing/updating its title or body),
+follow the `pull-request` skill at `~/.claude/skills/pull-request.md` — it
+defines the title format (English, changelog-ready, `[EXO-XXXX]` tag), the Dutch
+body following the repo's PR template, how to describe testing, the optional
+Notion-ticket lookup, and the mandatory Claude-generated disclaimer. Load and
+apply it whenever you start drafting or opening a PR.
+
+As with `pr-comments`, the detail lives in the skill on purpose: its rule to
+write the PR body in Dutch must NOT leak into normal chat replies, which stay in
+the language I'm prompting in.
+
 ## Fixing PR issues
 
 When fixing issues on a pull request:
