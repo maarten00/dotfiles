@@ -1,9 +1,6 @@
 ---
-
 name: pull-request
-
 description: "Rules for writing a GitHub pull request: the title (English, changelog-ready) and the body (Dutch, following the repo's PR template). Load this whenever you are about to draft, open, or update a PR — e.g. 'open a PR', 'gh pr create', 'write the PR description', 'update the pull request body'. These rules govern the PR title and body text only; they do NOT change the language of normal chat replies."
-
 ---
 
 
@@ -15,7 +12,10 @@ Guidelines for writing the title and body of a GitHub pull request. These rules 
 
 If a Notion link to the ticket hasn't been provided, **ask for one once** — make clear it's optional and proceed without it if there is none.
 
-When a link is given, fetch the page (`notion-fetch` with the URL) and read out the **`EXO-XXXX` ticket number** from its title or properties. Use it to:
+When a link is given and the current harness has connected Notion access, fetch
+the page and read the **`EXO-XXXX` ticket number** from its title or properties.
+If Notion access is unavailable, ask for the ticket number once and proceed
+without it when none is provided. Use the number to:
 
 - append `[EXO-XXXX]` to the PR title;
 - fill the `## Issues` section (`**Issue:** EXO-XXXX`).
@@ -102,9 +102,9 @@ If the correct label is genuinely unclear from the change, pick the closest one 
 
 ## Disclaimer
 
-Always end the body with a disclaimer marking the description as Claude-generated. A small italic note on its own line, separated by a rule:
+Always end the body with a disclaimer marking the description as AI-generated. A small italic note on its own line, separated by a rule:
 
     ---
-    🤖 _Deze PR-omschrijving is gegenereerd door Claude._
+    🤖 _Deze PR-omschrijving is gegenereerd door een AI-assistent._
 
 This disclaimer is mandatory on every PR body — never omit it.

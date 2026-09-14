@@ -1,0 +1,3 @@
+# Whole-repository Agent Skills sources, one per line.
+# Skip these with: scripts/sync-agent-skills.sh --local
+addyosmani/agent-skills

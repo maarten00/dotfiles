@@ -37,7 +37,7 @@ After backing up your old Mac you may now follow these install instructions to s
     cd ~/.dotfiles && ./fresh.sh
     ```
 
-   This will also symlink your tracked Ghostty config from [`ghostty/config`](./ghostty/config) to `~/Library/Application Support/com.mitchellh.ghostty/config`, and your global Claude Code instructions from [`claude/CLAUDE.md`](./claude/CLAUDE.md) to `~/.claude/CLAUDE.md`.
+   This will also symlink your tracked Ghostty config from [`ghostty/config`](./ghostty/config) to `~/Library/Application Support/com.mitchellh.ghostty/config`, link your global Claude Code instructions from [`claude/CLAUDE.md`](./claude/CLAUDE.md), and install your personal and declared external Agent Skills for Claude Code and Codex. When `npx` is not available yet, the setup installs the latest Node LTS release through `nvm` first.
 
 5. Download the Iterm2 theme to your downloads folder. The color settings can be imported into iTerm2. Apply them in iTerm through iTerm → preferences → profiles → colors → load presets. You can create a different profile other than Default if you wish to do so.
 6. Restart your computer to finalize the process
@@ -49,3 +49,57 @@ Your Mac is now ready to use!
 ### Cleaning your old Mac (optionally)
 
 After you've set up your new Mac you may want to wipe and clean install your old Mac. Follow [this article](https://support.apple.com/guide/mac-help/erase-and-reinstall-macos-mh27903/mac) to do that. Remember to [backup your data](#backup-your-data) first!
+
+## Agent Skills
+
+Personal skills use the open Agent Skills layout and live in
+[`skills/`](./skills):
+
+```text
+skills/
+  create-branch/SKILL.md
+  design-first/SKILL.md
+  pr-comments/SKILL.md
+  pull-request/SKILL.md
+```
+
+Edit these tracked source files rather than the installer-managed copies in an
+agent's home directory. To add a personal skill, create
+`skills/<skill-name>/SKILL.md` with `name` and `description` YAML frontmatter.
+
+External whole-repository packs are declared one per line in
+[`agent-skills.sources`](./agent-skills.sources). The current setup includes
+[`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) and
+installs all 25 of its skills. The generic installer copies skill directories;
+upstream repository-level supplementary references are only guaranteed by the
+pack's native whole-repository integrations. The skills remain usable without
+those optional checklists.
+
+Run a local-only refresh after editing a personal skill:
+
+```zsh
+./scripts/sync-agent-skills.sh --local
+```
+
+By default, refresh personal skills and install or update all declared external
+packs:
+
+```zsh
+./scripts/sync-agent-skills.sh
+```
+
+External installation stays interactive so the CLI can surface existing skills
+before replacing a same-named entry.
+
+The wrapper pins Vercel's `skills` CLI and targets Claude Code and Codex by
+default. Override the target list for one run with a space-separated list of
+[supported agent identifiers](https://github.com/vercel-labs/skills#supported-agents):
+
+```zsh
+AGENT_SKILLS_AGENTS='claude-code codex cursor gemini-cli' \
+  ./scripts/sync-agent-skills.sh
+```
+
+`fresh.sh` installs both personal and external skills. The repository's
+post-merge and post-rewrite hooks refresh personal skills only, avoiding network
+access and implicit third-party updates during normal Git operations.

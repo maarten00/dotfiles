@@ -1,6 +1,12 @@
 #!/bin/sh
 # Runs after history is rewritten (e.g. `git pull --rebase`, `git rebase`,
-# `git commit --amend`). Re-links Claude Code skills so skills that arrive via a
-# rebased pull are picked up too (post-merge does not fire on rebase pulls).
+# `git commit --amend`). Refreshes personal skills without fetching or updating
+# third-party sources (post-merge does not fire on rebase pulls).
 
-exec "$HOME/.dotfiles/claude/link-skills.sh"
+repo_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+
+if ! "$repo_dir/scripts/sync-agent-skills.sh" --offline; then
+  printf 'Could not refresh personal Agent Skills; run scripts/sync-agent-skills.sh manually.\n' >&2
+fi
+
+exit 0

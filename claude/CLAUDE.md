@@ -71,7 +71,7 @@ for me to concentrate on — say it once, clearly, then stop.
 ## GitHub PR review comments
 
 When reviewing a GitHub PR and placing comments (inline or general), follow the
-`pr-comments` skill at `~/.claude/skills/pr-comments.md` for every comment — it
+`pr-comments` skill at `~/.claude/skills/pr-comments/SKILL.md` for every comment — it
 defines the required language, style, and the mandatory "automated Claude
 comment" footnote. Load and apply it whenever you start drafting or posting PR
 review comments.
@@ -83,7 +83,7 @@ language I'm prompting in.
 ## Creating pull requests
 
 When opening a GitHub pull request (or writing/updating its title or body),
-follow the `pull-request` skill at `~/.claude/skills/pull-request.md` — it
+follow the `pull-request` skill at `~/.claude/skills/pull-request/SKILL.md` — it
 defines the title format (English, changelog-ready, `[EXO-XXXX]` tag), the Dutch
 body following the repo's PR template, how to describe testing, the optional
 Notion-ticket lookup, and the mandatory Claude-generated disclaimer. Load and

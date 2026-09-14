@@ -1,5 +1,7 @@
 #!/bin/sh
 
+dotfiles_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
 echo "Setting up your Mac..."
 
 # Check for Oh My Zsh and install if we don't have it
@@ -29,9 +31,6 @@ ln -sfn "$HOME/.dotfiles/ghostty/config" "$HOME/Library/Application Support/com.
 mkdir -p "$HOME/.claude"
 ln -sfn "$HOME/.dotfiles/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
-# Symlink the Claude Code skills from the .dotfiles (leaves machine-local skills untouched)
-sh "$HOME/.dotfiles/claude/link-skills.sh"
-
 # Route this repo's git hooks to the tracked git-hooks directory, so pulling new
 # skills re-links them automatically (see git-hooks/post-merge)
 git -C "$HOME/.dotfiles" config core.hooksPath "$HOME/.dotfiles/git-hooks"
@@ -49,6 +48,18 @@ brew update
 # Install all our dependencies with bundle (See Brewfile)
 brew tap homebrew/bundle
 brew bundle --file ./Brewfile
+
+# The Agent Skills installer runs through npx. Bootstrap Node through the
+# already-configured nvm installation only when this machine does not have it.
+if ! command -v npx >/dev/null 2>&1; then
+  export NVM_DIR="$HOME/.nvm"
+  mkdir -p "$NVM_DIR"
+  . "$(brew --prefix nvm)/nvm.sh"
+  nvm install --lts
+fi
+
+# Install personal and declared external skills for the configured AI agents
+"$dotfiles_dir/scripts/sync-agent-skills.sh"
 
 # Set macOS preferences - we will run this last because this will reload the shell
 source ./.macos
