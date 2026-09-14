@@ -1,5 +1,19 @@
 # Global instructions
 
+## Branch naming
+
+In `exonet/*` repositories only (check the `origin` remote points at
+`github.com/exonet/…`), always prefix new git branches with `mku/` — these are my
+initials. Never use any other prefix (not `bwe/`, `mk/`, `codex/`, `feature/`,
+etc.) unless I explicitly ask for one in that message. Nothing in the repo config
+sets a prefix; the prefix is yours to choose, so it is always `mku/`. Keep the
+rest of the branch name as a short kebab-case description (with the `EXO-XXXX`
+ticket tag when there is one), e.g. `mku/fix-flaky-sharded-api-tests`,
+`mku/EXO-2043-report-registrar-ratelimit`. Outside `exonet/*` repos, don't apply
+this rule — use Conventional Branch prefixes instead (`feat/`, `fix/`, `chore/`,
+`refactor/`, `docs/`, `test/`, …, the Conventional Commits type keywords), e.g.
+`feat/task-creation`, `fix/duplicate-tasks`.
+
 ## Delegation and subagents
 
 My default model is Opus and I don't use Plan Mode, so `opusplan`'s automatic Opus/Sonnet split never kicks in — work stays on Opus unless deliberately delegated. Push the right work onto subagents via the Agent tool, picking the cheapest model that still does the job.

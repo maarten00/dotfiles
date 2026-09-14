@@ -73,7 +73,9 @@ Include the setup a tester needs (a fixture to create first, an artisan command 
 
 ## Labels
 
-Every PR carries **exactly one** label — never apply a second one. Add it when opening (`gh pr create --label …`) or right after (`gh pr edit <nr> --add-label …`). Pick the single label that best captures the change.
+Apply **exactly one** label yourself — never add a second one. Add it when opening (`gh pr create --label …`) or right after (`gh pr edit <nr> --add-label …`). Pick the single label that best captures the change.
+
+Labels the repo adds automatically (e.g. `development`) are separate — leave those in place, don't remove them. The one-label rule is only about the label you choose to apply.
 
 Usually that is the primary type:
 
