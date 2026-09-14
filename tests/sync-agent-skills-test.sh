@@ -35,33 +35,13 @@ assert_log_contains()
 }
 
 export AGENT_SKILLS_TEST_LOG="$test_dir/invocations.log"
-export AGENT_SKILLS_HOME="$test_dir/home"
 export PATH="$test_dir/bin:$PATH"
-
-mkdir -p "$AGENT_SKILLS_HOME/.claude/skills"
-ln -s "$repo_dir/claude/skills/create-branch.md" \
-    "$AGENT_SKILLS_HOME/.claude/skills/create-branch.md"
-ln -s "$test_dir/unmanaged.md" \
-    "$AGENT_SKILLS_HOME/.claude/skills/unmanaged.md"
 
 : > "$AGENT_SKILLS_TEST_LOG"
 "$repo_dir/scripts/sync-agent-skills.sh"
 assert_line_count 2
 assert_log_contains "--yes skills@1.5.26 add $repo_dir --global --skill * --yes --agent claude-code --agent codex"
 assert_log_contains "skills@1.5.26 add addyosmani/agent-skills --global --skill * --agent claude-code --agent codex"
-[ ! -L "$AGENT_SKILLS_HOME/.claude/skills/create-branch.md" ] ||
-    fail 'legacy dotfiles-managed Claude symlink remains'
-[ -L "$AGENT_SKILLS_HOME/.claude/skills/unmanaged.md" ] ||
-    fail 'unmanaged Claude symlink was removed'
-
-ln -s "$repo_dir/claude/skills/create-branch.md" \
-    "$AGENT_SKILLS_HOME/.claude/skills/create-branch.md"
-if AGENT_SKILLS_TEST_FAIL=true "$repo_dir/scripts/sync-agent-skills.sh" 2>/dev/null; then
-    fail 'installer failure was ignored'
-fi
-[ -L "$AGENT_SKILLS_HOME/.claude/skills/create-branch.md" ] ||
-    fail 'legacy link was removed before its replacement installed'
-rm "$AGENT_SKILLS_HOME/.claude/skills/create-branch.md"
 
 : > "$AGENT_SKILLS_TEST_LOG"
 "$repo_dir/scripts/sync-agent-skills.sh" --offline

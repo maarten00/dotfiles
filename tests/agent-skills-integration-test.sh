@@ -52,8 +52,7 @@ EOF
 chmod +x "$test_dir/bin/npx"
 
 for hook in post-merge post-rewrite; do
-    PATH="$test_dir/bin:$PATH" AGENT_SKILLS_HOME="$test_dir/home" \
-        "$repo_dir/git-hooks/$hook" 2>/dev/null ||
+    PATH="$test_dir/bin:$PATH" "$repo_dir/git-hooks/$hook" 2>/dev/null ||
         fail "$hook blocks git work when offline refresh fails"
 done
 

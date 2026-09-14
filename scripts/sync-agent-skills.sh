@@ -38,7 +38,6 @@ esac
 repo_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 agents=${AGENT_SKILLS_AGENTS:-'claude-code codex'}
 sources_file=${AGENT_SKILLS_SOURCES_FILE:-"$repo_dir/agent-skills.sources"}
-agent_skills_home=${AGENT_SKILLS_HOME:-"$HOME"}
 
 command -v npx >/dev/null 2>&1 || {
     printf 'npx is required to install agent skills.\n' >&2
@@ -84,24 +83,7 @@ install_source()
     "$@"
 }
 
-remove_legacy_claude_links()
-{
-    for skill_file in "$repo_dir"/skills/*/SKILL.md; do
-        [ -f "$skill_file" ] || continue
-
-        skill_name=$(basename -- "$(dirname -- "$skill_file")")
-        legacy_link="$agent_skills_home/.claude/skills/$skill_name.md"
-        [ -L "$legacy_link" ] || continue
-
-        legacy_target=$(readlink "$legacy_link")
-        [ "$legacy_target" = "$repo_dir/claude/skills/$skill_name.md" ] || continue
-
-        rm "$legacy_link"
-    done
-}
-
 install_source "$repo_dir" true
-remove_legacy_claude_links
 
 if [ "$include_external" = true ]; then
     [ -f "$sources_file" ] || {
