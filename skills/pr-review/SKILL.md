@@ -71,6 +71,37 @@ Write in Dutch, but keep English programming terms where that reads naturally (`
 
 To the point and punctual. Keep each comment as short as possible while still giving enough detail to pin down the issue — name the concrete problem and where it bites, skip the throat-clearing.
 
+### The comment body
+
+The body is read by a **human**, so keep it clear and light on technical detail.
+
+- Describe what goes wrong **from the end user's perspective** wherever the finding allows it: which customer or admin action produces the wrong result, and what they end up seeing. `Een klant die zijn tweede domein toevoegt krijgt de melding van het eerste te zien` lands faster than a sentence about an unhandled nullable return.
+- Drop to implementation detail only when the implementation *is* the finding (a race condition, a leaked connection) — and then still say what it costs the user.
+- One finding per comment. If you're writing "en daarnaast", it's a second comment.
+
+### Technical details, collapsed
+
+Anything an agent or a developer needs to actually resolve the comment — the call path, a reproduction, the suggested fix, related code elsewhere — goes in a collapsed block underneath, so it never gets between the reader and the point:
+
+    <details>
+    <summary>Technische details</summary>
+
+    …call path, reproductie, voorgestelde fix…
+
+    </details>
+
+GitHub needs the blank line after `</summary>` for the markdown inside to render.
+
+Only add the box when it carries something the body doesn't. A box that restates the body in longer words is noise — leave it out.
+
+### The review summary
+
+The summary is read first and by a human who doesn't want a wall of text before they look at the code. Keep it to the tally line (step 7) plus at most a couple of sentences.
+
+- **Don't re-explain the findings.** They're already inline, one click away; repeating them there doubles the reading for no gain.
+- What belongs here and nowhere else: ticket-coverage gaps that don't map to a line, and anything about the change as a whole — a pattern repeated across files, a missing migration, an architectural concern.
+- Nothing worth saying beyond the tally? Then post just the tally.
+
 ## 7. Severity and confidence
 
 Open every comment with one label line, so the author can triage the review without reading every thread:
@@ -113,3 +144,26 @@ Always end with a footnote marking the text as AI-generated. Use a small italic 
     🤖 _Automatische comment gegenereerd door een AI-assistent._
 
 This footnote is mandatory on **every** comment — each inline comment and the review's summary body. Never omit it.
+
+## Putting it together
+
+A finished inline comment, with every piece in order — label, human-readable body, collapsed detail, footnote:
+
+    🟠 **Belangrijk** · vrij zeker
+
+    Een klant die zijn abonnement opzegt op de laatste dag van de maand houdt
+    toegang tot het einde van de vólgende maand. De opzegdatum wordt naar boven
+    afgerond in plaats van naar beneden.
+
+    <details>
+    <summary>Technische details</summary>
+
+    `Subscription::endsAt()` gebruikt `ceil()` op het verschil in maanden, dus
+    een opzegging op 31-01 levert `endsAt = 28-02` in plaats van `31-01`. Dezelfde
+    afronding zit in `BillingCycle::next()` (regel 88) — die kant is hier niet
+    aangepast, maar loopt wel mee in dezelfde berekening.
+
+    </details>
+
+    ---
+    🤖 _Automatische comment gegenereerd door een AI-assistent._
