@@ -1,6 +1,6 @@
 ---
 name: pr-review
-description: "How to review a GitHub pull request: check it against the Notion ticket, lean on CI instead of re-running tests, post every finding as one grouped GitHub review, and the required language, style and footnote for each comment. Load this whenever you are about to review a PR or place comments on one — e.g. 'review this PR', 'leave comments on the pull request', 'gh pr review', 'reply to the review comment', 'post inline comments'. These rules govern the review and its comment text only; they do NOT change the language of normal chat replies."
+description: "How to review a GitHub pull request: check it against the Notion ticket, lean on CI instead of re-running tests, post every finding as one grouped GitHub review, and the required language, style, severity/confidence labels and footnote for each comment. Load this whenever you are about to review a PR or place comments on one — e.g. 'review this PR', 'leave comments on the pull request', 'gh pr review', 'reply to the review comment', 'post inline comments'. These rules govern the review and its comment text only; they do NOT change the language of normal chat replies."
 ---
 
 
@@ -49,7 +49,7 @@ Create the review in a single call, with every inline comment attached:
     gh api --method POST repos/OWNER/REPO/pulls/NUMBER/reviews --input - <<'JSON'
     {
       "event": "COMMENT",
-      "body": "…samenvatting + ticket-dekking…",
+      "body": "**N bevindingen:** … — ticket-dekking …",
       "comments": [
         { "path": "src/Foo.php", "line": 42, "body": "…" },
         { "path": "src/Bar.php", "start_line": 10, "line": 14, "body": "…" }
@@ -71,7 +71,41 @@ Write in Dutch, but keep English programming terms where that reads naturally (`
 
 To the point and punctual. Keep each comment as short as possible while still giving enough detail to pin down the issue — name the concrete problem and where it bites, skip the throat-clearing.
 
-## 7. Footnote
+## 7. Severity and confidence
+
+Open every comment with one label line, so the author can triage the review without reading every thread:
+
+    🔴 **Blocker** · zeker
+
+**Severity** says what the author is expected to *do* — not how annoyed you are:
+
+| Label | Meaning |
+| --- | --- |
+| 🔴 `Blocker` | Must be fixed before merge: a bug users will hit, data loss, a security hole, an unintended breaking change. |
+| 🟠 `Belangrijk` | Should be fixed, but won't take production down — an edge case that's handled wrong, missing validation, a misleading name in a public API. |
+| 🔵 `Suggestie` | A real improvement the author can take or leave. |
+| ⚪ `Nit` | Cosmetic. Safe to ignore, and say so. |
+
+**Confidence** says how sure you are the finding is real:
+
+| Label | Meaning |
+| --- | --- |
+| `zeker` | You traced it in the code and can name the input or call path that triggers it. |
+| `vrij zeker` | The reasoning holds, but you couldn't check some context — runtime config, a caller outside the diff. |
+| `twijfel` | Might well be wrong; you're flagging it so the author can check. |
+
+Rules that keep the labels worth reading:
+
+- Never mark something `Blocker` below `vrij zeker`. If you can't back it up, lower the severity or ask a question instead of asserting a bug.
+- Phrase a `twijfel` comment as a question, not a verdict — the author knows the context you're missing.
+- Don't inflate. Severity is the risk the change carries, not how much you'd like it changed; if most of a review is 🔴, the label has stopped meaning anything.
+- Ticket-coverage gaps from step 1 get labelled too — a requirement that isn't implemented is usually 🔴 or 🟠.
+
+Open the review's summary body with the tally, so the author sees in one line whether anything blocks:
+
+    **3 bevindingen:** 1 🔴 blocker, 2 🔵 suggesties — ticket EXO-1234 verder volledig gedekt.
+
+## 8. Footnote
 
 Always end with a footnote marking the text as AI-generated. Use a small italic note on its own line, separated by a rule:
 
