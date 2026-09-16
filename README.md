@@ -59,7 +59,7 @@ Personal skills use the open Agent Skills layout and live in
 skills/
   create-branch/SKILL.md
   design-first/SKILL.md
-  pr-comments/SKILL.md
+  pr-review/SKILL.md
   pull-request/SKILL.md
 ```
 
