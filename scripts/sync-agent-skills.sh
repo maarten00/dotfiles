@@ -108,32 +108,51 @@ remove_installed_skill()
             ;;
     esac
 
+    removed=false
     universal_dir="$agent_skills_home/.agents/skills/$name"
-    [ ! -d "$universal_dir" ] || rm -rf "$universal_dir"
+
+    if [ -d "$universal_dir" ]; then
+        rm -rf "$universal_dir"
+        removed=true
+    fi
 
     claude_link="$agent_skills_home/.claude/skills/$name"
 
     if [ -L "$claude_link" ]; then
         case $(readlink "$claude_link") in
-            */.agents/skills/"$name") rm -- "$claude_link" ;;
+            */.agents/skills/"$name")
+                rm -- "$claude_link"
+                removed=true
+                ;;
         esac
     elif [ -e "$claude_link" ]; then
         printf 'Left %s in place: not a link into the shared skills directory.\n' \
             "$claude_link" >&2
     fi
 
-    printf 'Pruned removed personal skill: %s\n' "$name"
+    [ "$removed" = false ] ||
+        printf 'Pruned removed personal skill: %s\n' "$name"
 }
 
-# Skills recorded on the previous run but gone from skills/ are uninstalled, so
-# deleting a personal skill propagates to every machine that pulls.
+# Names this repo shipped at some point but no longer does. Git history is the
+# primary source, so a machine that last synced before the manifest existed
+# still gets cleaned up; the manifest covers checkouts without usable history.
+stale_skill_names()
+{
+    [ ! -f "$manifest_file" ] || cat -- "$manifest_file"
+
+    git -C "$repo_dir" log --diff-filter=D --name-only --format= \
+        -- 'skills/*/SKILL.md' 2>/dev/null |
+        sed -n 's|^skills/\([^/]*\)/SKILL.md$|\1|p'
+}
+
+# Anything the repo used to ship but no longer does is uninstalled, so deleting
+# a personal skill propagates to every machine that pulls.
 prune_removed_skills()
 {
-    [ -f "$manifest_file" ] || return 0
-
     current=$(personal_skills)
 
-    while IFS= read -r name || [ -n "$name" ]; do
+    stale_skill_names | sort -u | while IFS= read -r name; do
         [ -n "$name" ] || continue
 
         if printf '%s\n' "$current" | grep -Fxq -- "$name"; then
@@ -141,7 +160,7 @@ prune_removed_skills()
         fi
 
         remove_installed_skill "$name"
-    done < "$manifest_file"
+    done
 }
 
 install_source "$repo_dir" true

@@ -107,7 +107,25 @@ if grep -Fxq -- gone "$AGENT_SKILLS_MANIFEST_FILE"; then
     fail 'the manifest still lists a pruned skill'
 fi
 
-# Skills from external packs are never in the manifest, so they survive a prune.
+# A skill the repo deleted before the manifest existed is still cleaned up, so a
+# machine that last synced against an older commit heals itself on the next pull.
+rm -f "$AGENT_SKILLS_MANIFEST_FILE"
+mkdir -p "$AGENT_SKILLS_HOME/.agents/skills/pr-comments" \
+    "$AGENT_SKILLS_HOME/.claude/skills"
+: > "$AGENT_SKILLS_HOME/.agents/skills/pr-comments/SKILL.md"
+ln -s ../../.agents/skills/pr-comments \
+    "$AGENT_SKILLS_HOME/.claude/skills/pr-comments"
+
+: > "$AGENT_SKILLS_TEST_LOG"
+"$repo_dir/scripts/sync-agent-skills.sh" --local >/dev/null
+
+[ ! -e "$AGENT_SKILLS_HOME/.agents/skills/pr-comments" ] ||
+    fail 'a skill deleted before the manifest existed was left installed'
+[ ! -L "$AGENT_SKILLS_HOME/.claude/skills/pr-comments" ] ||
+    fail 'a skill deleted before the manifest existed left a dangling link'
+
+# Skills from external packs are never pruned: they are neither in the manifest
+# nor in this repo's history.
 mkdir -p "$AGENT_SKILLS_HOME/.agents/skills/external-pack-skill"
 : > "$AGENT_SKILLS_TEST_LOG"
 "$repo_dir/scripts/sync-agent-skills.sh" --local >/dev/null
