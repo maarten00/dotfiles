@@ -67,6 +67,14 @@ Edit these tracked source files rather than the installer-managed copies in an
 agent's home directory. To add a personal skill, create
 `skills/<skill-name>/SKILL.md` with `name` and `description` YAML frontmatter.
 
+Deleting a personal skill propagates too: the installer records the skills this
+repo ships in `~/.agents/.dotfiles-skills` and uninstalls the ones that
+disappear from `skills/` on the next run. Only names from that manifest are ever
+removed, so skills from external packs are left alone. The manifest is written
+on the first run after adding a skill, which means a skill deleted *before* that
+first run has to be removed by hand from `~/.agents/skills/` and
+`~/.claude/skills/`.
+
 External whole-repository packs are declared one per line in
 [`agent-skills.sources`](./agent-skills.sources). The current setup includes
 [`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) and
