@@ -1,5 +1,20 @@
 # Global instructions
 
+## Reply language
+
+Always answer in the language I prompt you in — English unless I write to you in
+Dutch. This holds regardless of:
+
+- the language of anything you just read — code, comments, file contents, commit
+  messages, ticket text, or a repo that is otherwise Dutch;
+- any skill that mandates a language for its own output (`pr-review`,
+  `pull-request`). Those govern only the artifact they produce — a GitHub review
+  comment, a PR title or body — never the chat reply that accompanies it. Writing
+  a Dutch PR body does not make the surrounding conversation Dutch.
+
+If you catch yourself switching language mid-conversation without me switching
+first, that is a bug, not a preference.
+
 ## Branch naming
 
 In `exonet/*` repositories only (check the `origin` remote points at
@@ -77,9 +92,7 @@ one grouped GitHub review, and the required language, style and mandatory
 "automated Claude comment" footnote for every comment. Load and apply it whenever
 you start reviewing a PR or drafting comments on one.
 
-The detail lives in the skill (not here) on purpose: its rule to write PR
-comments in Dutch must NOT leak into normal chat replies, which stay in the
-language I'm prompting in.
+The detail lives in the skill, not here, on purpose — see **Reply language**.
 
 ## Creating pull requests
 
@@ -90,9 +103,8 @@ body following the repo's PR template, how to describe testing, the optional
 Notion-ticket lookup, and the mandatory Claude-generated disclaimer. Load and
 apply it whenever you start drafting or opening a PR.
 
-As with `pr-review`, the detail lives in the skill on purpose: its rule to
-write the PR body in Dutch must NOT leak into normal chat replies, which stay in
-the language I'm prompting in.
+As with `pr-review`, the detail lives in the skill on purpose — see **Reply
+language**.
 
 ## Fixing PR issues
 
