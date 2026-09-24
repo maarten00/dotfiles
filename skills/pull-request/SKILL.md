@@ -71,6 +71,10 @@ Prefer, in this order:
 
 Include the setup a tester needs (a fixture to create first, an artisan command to kick a queued job, a specific record id to act on) so the steps are runnable start to finish.
 
+## Draft
+
+Always open a new PR as a **draft** (`gh pr create --draft …`), so Maarten can check it before requesting reviews. Never mark it ready for review yourself (`gh pr ready`) unless he asks for that in that message.
+
 ## Labels
 
 Apply **exactly one** label yourself — never add a second one. Add it when opening (`gh pr create --label …`) or right after (`gh pr edit <nr> --add-label …`). Pick the single label that best captures the change.
