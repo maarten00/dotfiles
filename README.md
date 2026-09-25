@@ -78,8 +78,10 @@ cleans itself up on the next pull, with no manual step.
 
 External whole-repository packs are declared one per line in
 [`agent-skills.sources`](./agent-skills.sources). The current setup includes
-[`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) and
-installs all 25 of its skills. The generic installer copies skill directories;
+[`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) (25
+skills), [`ayghri/i-have-adhd`](https://github.com/ayghri/i-have-adhd) (1 skill)
+and [`dietrichgebert/ponytail`](https://github.com/dietrichgebert/ponytail) (6
+skills), installing every skill each pack ships. The generic installer copies skill directories;
 upstream repository-level supplementary references are only guaranteed by the
 pack's native whole-repository integrations. The skills remain usable without
 those optional checklists.

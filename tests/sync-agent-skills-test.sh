@@ -47,9 +47,11 @@ assert_manifest_lists()
 
 : > "$AGENT_SKILLS_TEST_LOG"
 "$repo_dir/scripts/sync-agent-skills.sh"
-assert_line_count 2
+assert_line_count 4
 assert_log_contains "--yes skills@1.5.26 add $repo_dir --global --skill * --yes --agent claude-code --agent codex"
 assert_log_contains "skills@1.5.26 add addyosmani/agent-skills --global --skill * --agent claude-code --agent codex"
+assert_log_contains "skills@1.5.26 add ayghri/i-have-adhd --global --skill * --agent claude-code --agent codex"
+assert_log_contains "skills@1.5.26 add dietrichgebert/ponytail --global --skill * --agent claude-code --agent codex"
 
 : > "$AGENT_SKILLS_TEST_LOG"
 "$repo_dir/scripts/sync-agent-skills.sh" --offline
