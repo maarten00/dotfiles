@@ -14,7 +14,7 @@ mouse-hide-while-typing = true
 
 macos-auto-secure-input = true
 macos-secure-input-indication = true
-macos-titlebar-style = tabs
+#macos-titlebar-style = tabs
 macos-icon = xray
 
 adjust-cursor-thickness = 2
