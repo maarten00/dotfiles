@@ -88,6 +88,7 @@ assert_line_count 1
 "$repo_dir/scripts/sync-agent-skills.sh" --local
 assert_manifest_lists pr-review
 assert_manifest_lists pull-request
+assert_manifest_lists self-review
 
 # A skill dropped from the repo is uninstalled from every agent on the next run.
 mkdir -p "$AGENT_SKILLS_HOME/.agents/skills/gone" \

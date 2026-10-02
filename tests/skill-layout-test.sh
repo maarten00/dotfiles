@@ -27,7 +27,7 @@ for skill_file in "$repo_dir"/skills/*/SKILL.md; do
         fail "$skill_file description exceeds 1024 characters"
 done
 
-[ "$count" -eq 4 ] || fail "expected 4 portable skills, found $count"
+[ "$count" -eq 5 ] || fail "expected 5 portable skills, found $count"
 
 if find "$repo_dir/claude/skills" -type f -name '*.md' -print -quit 2>/dev/null |
     grep . >/dev/null; then

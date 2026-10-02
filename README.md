@@ -61,6 +61,7 @@ skills/
   design-first/SKILL.md
   pr-review/SKILL.md
   pull-request/SKILL.md
+  self-review/SKILL.md
 ```
 
 Edit these tracked source files rather than the installer-managed copies in an

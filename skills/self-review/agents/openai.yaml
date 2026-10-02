@@ -1,0 +1,4 @@
+interface:
+  display_name: "Self Review"
+  short_description: "Review changes, then ask what to fix"
+  default_prompt: "Use $self-review to review my current changes and ask which findings I want fixed."
