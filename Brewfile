@@ -25,6 +25,7 @@ brew 'php'
 cask '1password'
 brew '1password-cli'
 cask 'keepingyouawake'
+cask 'openlogi' # Local-first Logitech Options+ alternative
 cask 'firefox'
 cask 'google-chrome'
 cask 'httpie'
