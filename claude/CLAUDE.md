@@ -29,6 +29,16 @@ this rule — use Conventional Branch prefixes instead (`feat/`, `fix/`, `chore/
 `refactor/`, `docs/`, `test/`, …, the Conventional Commits type keywords), e.g.
 `feat/task-creation`, `fix/duplicate-tasks`.
 
+## Commit signing
+
+In `exonet/*` repositories, every commit must be signed with the configured
+1Password signing key. Never bypass configured commit signing in any repository:
+do not use `--no-gpg-sign`, `commit.gpgsign=false`, change the signing key or
+provider to avoid a failure, or otherwise create an unsigned commit as a fallback.
+If 1Password signing fails, fix the signing issue or leave the work uncommitted
+and report the blocker. Preserve this requirement when delegating, rebasing,
+amending, or creating pull requests; verify signatures before pushing.
+
 ## Delegation and subagents
 
 My default model is Opus and I don't use Plan Mode, so `opusplan`'s automatic Opus/Sonnet split never kicks in — work stays on Opus unless deliberately delegated. Push the right work onto subagents via the Agent tool, picking the cheapest model that still does the job.

@@ -31,6 +31,9 @@ ln -sfn "$HOME/.dotfiles/ghostty/config" "$HOME/Library/Application Support/com.
 mkdir -p "$HOME/.claude"
 ln -sfn "$HOME/.dotfiles/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
+mkdir -p "$HOME/.codex"
+ln -sfn "$HOME/.dotfiles/codex/AGENTS.md" "$HOME/.codex/AGENTS.md"
+
 # Route this repo's git hooks to the tracked git-hooks directory, so pulling new
 # skills re-links them automatically (see git-hooks/post-merge)
 git -C "$HOME/.dotfiles" config core.hooksPath "$HOME/.dotfiles/git-hooks"
