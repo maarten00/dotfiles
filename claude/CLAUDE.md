@@ -29,6 +29,12 @@ this rule — use Conventional Branch prefixes instead (`feat/`, `fix/`, `chore/
 `refactor/`, `docs/`, `test/`, …, the Conventional Commits type keywords), e.g.
 `feat/task-creation`, `fix/duplicate-tasks`.
 
+For worktrees, never run `git worktree add` yourself. Let `EnterWorktree` (with
+a name) create it so `.worktreeinclude` copies `vendor/`, `.env` and friends,
+then rename the branch with `git branch -m <prefixed-name>`. If a worktree still
+lacks `vendor/`, copy it — never symlink it: the Composer autoloader resolves
+the symlink and loads app classes from the main checkout.
+
 ## Commit signing
 
 In `exonet/*` repositories, every commit must be signed with the configured
