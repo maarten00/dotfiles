@@ -66,7 +66,13 @@ before doing the work, say so, and tell me which level to switch to and why:
   rename) and the current level just burns tokens and time.
 
 Don't silently compensate and don't just proceed with a caveat — stop and let me
-decide, since only I can change the effort level (`/effort`).
+decide, since only I can change the effort level.
+
+When naming a level, give both the desktop-app label and the CLI value, since I
+use both: Low (`low`), Medium (`medium`), High (`high`), Extra (`xhigh`),
+Max (`max`) — e.g. "switch to Extra (`/effort xhigh`)". You usually can't see the
+current level, so don't guess it; name the level the task needs ("this needs at
+least Extra (`xhigh`)") and I'll judge whether I'm already there.
 
 ## Mark where the answer starts
 
