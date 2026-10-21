@@ -1,6 +1,6 @@
 ---
 name: pr-review
-description: "How to review a GitHub pull request: check it against the Notion ticket, lean on CI instead of re-running tests, post every finding as one grouped GitHub review, and the required language, style, severity/confidence labels and footnote for each comment. Load this whenever you are about to review a PR or place comments on one — e.g. 'review this PR', 'leave comments on the pull request', 'gh pr review', 'reply to the review comment', 'post inline comments'. These rules govern the review and its comment text only; they do NOT change the language of normal chat replies."
+description: "How to review a GitHub pull request: check it against the Notion ticket, lean on CI instead of re-running tests, post every finding as one grouped pending GitHub review for Maarten to submit, and the required language, style, severity/confidence labels and footnote for each comment. Load this whenever you are about to review a PR or place comments on one — e.g. 'review this PR', 'leave comments on the pull request', 'gh pr review', 'reply to the review comment', 'post inline comments'. These rules govern the review and its comment text only; they do NOT change the language of normal chat replies."
 ---
 
 
@@ -44,11 +44,10 @@ Don't run the test suite as part of a review, and don't follow "run test X" step
 
 Always post through GitHub's **review** feature, so all findings land in a single review instead of a stream of loose comments. This matters for the AI agents watching the PR on the other end: they get one event with the complete set of findings rather than N unrelated ones.
 
-Create the review in a single call, with every inline comment attached:
+Create the review as a **pending** (draft) review, so Maarten can read and edit the comments on GitHub before anyone else sees them. Do it in a single call, with every inline comment attached, and **leave out `event`** — without it GitHub keeps the review in the `PENDING` state:
 
     gh api --method POST repos/OWNER/REPO/pulls/NUMBER/reviews --input - <<'JSON'
     {
-      "event": "COMMENT",
       "body": "**N bevindingen:** … — ticket-dekking …",
       "comments": [
         { "path": "src/Foo.php", "line": 42, "body": "…" },
@@ -59,7 +58,9 @@ Create the review in a single call, with every inline comment attached:
 
 - Never use `gh pr comment` for review findings — that posts a loose issue comment outside the review.
 - Never post inline comments one at a time (`POST …/pulls/{nr}/comments`, or an inline-comment MCP tool) — each one fires its own event.
-- `event`: `COMMENT` by default. Only `REQUEST_CHANGES` or `APPROVE` when Maarten asks — and note GitHub refuses to let you approve your own PR.
+- Never submit the review yourself — no `event` in the create call, no `POST …/reviews/{id}/events`. Maarten submits it from the PR's *Files changed* tab and picks Comment / Request changes / Approve there. Only submit when he explicitly asks in that message.
+- After creating it, give Maarten the PR's *Files changed* link and say the review is pending and waiting for him to submit.
+- GitHub allows one pending review per user per PR, so the create call fails with a 422 if one already exists. Check first (`gh api repos/OWNER/REPO/pulls/NUMBER/reviews --jq '.[] | select(.state == "PENDING")'`) and ask Maarten whether to add to it or delete it — never discard his draft on your own.
 - `line` (and `start_line` for a range) are line numbers in the head of the diff; add `"side": "LEFT"` to comment on a removed line.
 - One review per pass. Replying to an existing thread afterwards is a separate thing and doesn't need a review wrapper (`gh api repos/OWNER/REPO/pulls/comments/{id}/replies`).
 
