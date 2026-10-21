@@ -116,5 +116,5 @@ AGENT_SKILLS_AGENTS='claude-code codex cursor gemini-cli' \
 ```
 
 `fresh.sh` installs both personal and external skills. The repository's
-post-merge and post-rewrite hooks refresh personal skills only, avoiding network
+post-merge, post-rewrite and post-checkout hooks refresh personal skills only, avoiding network
 access and implicit third-party updates during normal Git operations.

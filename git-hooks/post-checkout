@@ -1,0 +1,16 @@
+#!/bin/sh
+# Runs after a branch checkout, including the one inside `git rebase`. A rebase
+# that only fast-forwards rewrites no commits, so post-rewrite stays silent and
+# this hook is the only one that refreshes personal skills. Skips file
+# checkouts ($3 = 0) and checkouts that leave HEAD where it was.
+
+[ "$3" = 1 ] || exit 0
+[ "$1" != "$2" ] || exit 0
+
+repo_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+
+if ! "$repo_dir/scripts/sync-agent-skills.sh" --offline; then
+  printf 'Could not refresh personal Agent Skills; run scripts/sync-agent-skills.sh manually.\n' >&2
+fi
+
+exit 0

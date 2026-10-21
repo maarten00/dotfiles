@@ -29,7 +29,7 @@ skills_line=$(grep -nF 'scripts/sync-agent-skills.sh"' "$repo_dir/fresh.sh" |
 [ "$skills_line" -gt "$bundle_line" ] ||
     fail 'fresh.sh installs agent skills before its dependencies'
 
-for hook in post-merge post-rewrite; do
+for hook in post-merge post-rewrite post-checkout; do
     grep -F 'scripts/sync-agent-skills.sh"' "$repo_dir/git-hooks/$hook" >/dev/null ||
         fail "$hook does not sync portable skills"
 
@@ -51,7 +51,7 @@ exit 1
 EOF
 chmod +x "$test_dir/bin/npx"
 
-for hook in post-merge post-rewrite; do
+for hook in post-merge post-rewrite post-checkout; do
     PATH="$test_dir/bin:$PATH" "$repo_dir/git-hooks/$hook" 2>/dev/null ||
         fail "$hook blocks git work when offline refresh fails"
 done
