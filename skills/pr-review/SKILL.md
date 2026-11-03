@@ -10,6 +10,17 @@ Reviewing a GitHub pull request end to end: gather context → find issues → p
 
 Opening a PR is a different job — that is the `pull-request` skill.
 
+## 0. Claim the review
+
+Before reviewing, mark the PR and its ticket as Maarten's, so the team sees who picked it up:
+
+- **GitHub:** assign the PR to him — `gh pr edit NUMBER --repo OWNER/REPO --add-assignee @me` (login `maarten00`). Leave existing assignees in place.
+- **Notion:** when the PR mentions a ticket (see step 1 for how to find it), update it in `Sprint tasks` with `notion-update-page`:
+  - `Status` → `Reviewing`. If it already sits in `Merged`, `Done` or `Archived`, leave it and tell Maarten instead of moving it back.
+  - `Reviewer` (a person property) → add Maarten (`notion-get-self`; user id `190d872b-594c-81a4-a9ac-0002349177b0`), keeping any reviewers already set.
+
+Mention both changes when reporting back. If either fails — no Notion access, no permission on the repo — say so and carry on with the review.
+
 ## 1. Ticket context (Notion)
 
 When the PR points at a Notion ticket — a link in the body, an `EXO-XXXX` tag in the title, body or branch name — fetch it **before** reviewing the diff.
