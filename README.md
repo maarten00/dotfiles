@@ -50,6 +50,18 @@ Your Mac is now ready to use!
 
 After you've set up your new Mac you may want to wipe and clean install your old Mac. Follow [this article](https://support.apple.com/guide/mac-help/erase-and-reinstall-macos-mh27903/mac) to do that. Remember to [backup your data](#backup-your-data) first!
 
+## Raycast Script Commands
+
+Raycast [Script Commands](https://github.com/raycast/script-commands) live in
+[`raycast/script-commands/`](./raycast/script-commands). Raycast keeps its list
+of script directories in its own database, so link the folder once by hand:
+Raycast Settings → Extensions → **+** → Add Script Directory →
+`~/.dotfiles/raycast/script-commands`. Assign hotkeys to individual commands in
+the same Extensions list.
+
+To add a command, drop an executable script with `@raycast.*` metadata comments
+in that folder; Raycast picks it up automatically.
+
 ## Agent Skills
 
 Personal skills use the open Agent Skills layout and live in
