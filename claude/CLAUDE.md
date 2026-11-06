@@ -105,6 +105,32 @@ followed by a heading with a check emoji, then the conclusion:
 Keep explanations brief and don't repeat yourself. Long explanations are hard
 for me to concentrate on — say it once, clearly, then stop.
 
+## PhpStorm MCP
+
+When `mcp__phpstorm__*` tools are offered, prefer them over grep and manual
+multi-file edits where the IDE index does the job better:
+
+- `search_symbol`, `get_symbol_info`, `analyze_calls` — find definitions and usages.
+- `rename_refactoring`, `optimize_imports` — renames and imports across files.
+- `get_file_problems`, `lint_files` — PhpStorm inspections on files you just
+  edited, as a fast check before PHPStan/CI (not a replacement). Results can lag
+  briefly after an edit made outside the IDE.
+
+Skip `read_file`, `search_text`, `list_directory_tree` and the like — the
+built-in tools do the same.
+
+These tools only see the projects open in PhpStorm. Use them only when your
+working directory is a project open there; otherwise they silently answer for,
+or edit, a different checkout. Check with `get_all_open_file_paths` or
+`get_repositories` if unsure. In a worktree that isn't open in PhpStorm, don't
+use them at all.
+
+At the start of a big coding session (a multi-file feature or refactor, not a
+quick fix) where the PhpStorm tools would target the wrong checkout, ask me once
+to make them available: open the worktree folder as a project in PhpStorm, or,
+when working in the main checkout, check out the right branch there. Don't block
+on it — carry on with the built-in tools if I decline.
+
 ## Reviewing GitHub PRs
 
 When reviewing a GitHub PR, follow the `pr-review` skill at
