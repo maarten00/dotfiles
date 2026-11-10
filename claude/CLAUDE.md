@@ -131,6 +131,31 @@ to make them available: open the worktree folder as a project in PhpStorm, or,
 when working in the main checkout, check out the right branch there. Don't block
 on it — carry on with the built-in tools if I decline.
 
+## Notion sprint tasks
+
+All our work lives in one Notion database, **Sprint tasks**:
+`collection://a6d84700-59c1-46a7-925e-76acc0a847ed`. To look up sprint cards, query
+it with `notion-query-data-sources` (SQL) — don't `notion-search` the whole
+workspace. Use `notion-search` only for things outside this database.
+
+- My Notion user id comes from `notion-get-self`.
+- `Developer` (person property) is who picked a card up; `Reviewer` and
+  `Reporter` also exist. Person columns are JSON arrays of user ids — filter
+  with `LIKE`.
+- Closed statuses are `Merged`, `Done` and `Archived`.
+- `Task ID` is the bare integer (`EXO-2078` → `2078`); the title column is
+  `"Task name"`. Filter on either to find one specific card.
+- Cards link to PRs through the relation `GitHub Pull Requests`.
+
+My open cards:
+
+```sql
+SELECT "Task ID", "Task name", "Status", "Priority", "Sprint", url
+FROM "collection://a6d84700-59c1-46a7-925e-76acc0a847ed"
+WHERE "Developer" LIKE '%<my user id>%'
+  AND "Status" NOT IN ('Merged','Done','Archived')
+```
+
 ## Reviewing GitHub PRs
 
 When reviewing a GitHub PR, follow the `pr-review` skill at

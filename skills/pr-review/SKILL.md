@@ -25,7 +25,15 @@ Mention both changes when reporting back. If either fails — no Notion access, 
 
 When the PR points at a Notion ticket — a link in the body, an `EXO-XXXX` tag in the title, body or branch name — fetch it **before** reviewing the diff.
 
-- Fetch the page with the Notion tools when the harness has them (`notion-fetch` for a link, `notion-search` on `EXO-XXXX` when only the number is given). Without Notion access, say so and review without it — never guess what the ticket asked for.
+- Fetch the page with the Notion tools when the harness has them: `notion-fetch` for a link. When only the number is given, don't `notion-search` the workspace — every ticket lives in `Sprint tasks`, so look it up with `notion-query-data-sources` (SQL) and fetch the `url` it returns. `Task ID` is the bare integer (`EXO-2078` → `2078`):
+
+  ```sql
+  SELECT "Task ID", "Task name", "Status", url
+  FROM "collection://a6d84700-59c1-46a7-925e-76acc0a847ed"
+  WHERE "Task ID" = 2078
+  ```
+
+  Without Notion access, say so and review without it — never guess what the ticket asked for.
 - Also read the ticket's **comments** (`notion-get-comments`). Requirements get revised in that thread after the page was written, so a comment can override the page body; take the most recent statement as leading.
 - Then check the PR against ticket + comments:
   - something asked for that the PR doesn't cover → a finding;

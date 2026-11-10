@@ -14,6 +14,10 @@ If a Notion link to the ticket hasn't been provided, **ask for one once** — ma
 
 When a link is given and the current harness has connected Notion access, fetch
 the page and read the **`EXO-XXXX` ticket number** from its title or properties.
+When only a ticket number or name is known, don't `notion-search` the workspace:
+every ticket lives in `Sprint tasks`, so look it up with
+`notion-query-data-sources` (SQL on `collection://a6d84700-59c1-46a7-925e-76acc0a847ed`,
+filtering on `"Task ID"` — the bare integer — or `"Task name"`).
 If Notion access is unavailable, ask for the ticket number once and proceed
 without it when none is provided. Use the number to:
 
