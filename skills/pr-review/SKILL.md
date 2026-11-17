@@ -112,6 +112,14 @@ session title to `R: [#<PR>] <PR title>`. Load the tool first:
 `session_id: "self"`. Only when that tool is missing, hand him a `/rename R: [#<PR>] <title>` line.
 This makes review conversations findable in his sidebar later.
 
+Then file the session under the **Reviews** section of his sidebar. Load
+`ToolSearch select:mcp__ccd_sidebar__list_sections,mcp__ccd_sidebar__create_section,mcp__ccd_sidebar__move_sessions`,
+find the `manual` section named `Reviews` with `list_sections` (match on the name, never a stored
+id), create it with `create_section` only when it is missing, and call `move_sessions` with
+`session_ids: ["self"]` and that `section_id`. This only changes where the session shows in the
+sidebar: its working folder (the repo checkout, such as `backend`) stays as it is. Skip it silently
+when the tools are absent.
+
 Then bind the PR to the session, so the app archives the session once the PR merges or closes.
 Load `ToolSearch select:mcp__ccd_pr__get_status,mcp__ccd_pr__unbind_pr,mcp__ccd_pr__bind_pr,mcp__ccd_pr__set_monitor`.
 
@@ -749,6 +757,7 @@ Try once, and move on. Never retry a dead MCP server in a loop and never stall w
 | The `code-comments` skill is absent | Apply the rule directly: a comment earns its place when it explains non-obvious local logic or a WHY. |
 | The `pr-review-subagent` agent type is absent | Use the default type and say so in the report. |
 | The session-title tool is absent | Hand him a `/rename R: [#<PR>] <title>` line. |
+| The `ccd_sidebar` tools are absent | Skip filing the session under Reviews. |
 | `bind_pr` refuses the PR, or the `ccd_pr` tools are absent | Go on without it. Say in the report that this session will not archive itself when the PR merges. |
 | `PushNotification` or `set_unread` is absent | Skip it; the report's last line still carries the next action. |
 | The repo has no `CLAUDE.md`, `AGENTS.md` or `.ai/` conventions | Review against the code's own local conventions plus general correctness. Do not import another repo's rules. |
