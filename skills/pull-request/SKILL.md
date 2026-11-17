@@ -101,6 +101,10 @@ Prefer, in this order:
 
 Include the setup a tester needs (a fixture to create first, an artisan command to kick a queued job, a specific record id to act on) so the steps are runnable start to finish.
 
+## Voice pass before posting
+
+Once the body is drafted (disclaimer included), hand it to the `post-on-behalf` skill for its voice pass, then open or update the PR with the body read from the file it writes: `gh pr create --draft … --body-file ~/.claude/post-on-behalf/<slug>.reviewed.md`. A gate hook blocks `gh pr create` with any other body. The voice pass rewrites prose only; the template structure and the disclaimer stay as this skill sets them. Route a rewritten body for an existing PR (`gh pr edit --body-file …`) through it too, even though the hook does not gate that.
+
 ## Draft
 
 Always open a new PR as a **draft** (`gh pr create --draft …`), so Maarten can check it before requesting reviews. Never mark it ready for review yourself (`gh pr ready`) unless he asks for that in that message.

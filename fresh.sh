@@ -31,6 +31,12 @@ ln -sfn "$HOME/.dotfiles/ghostty/config" "$HOME/Library/Application Support/com.
 mkdir -p "$HOME/.claude"
 ln -sfn "$HOME/.dotfiles/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
+# Symlink the post-on-behalf gate hook and the pr-review subagent. The hook is
+# registered as a PreToolUse Bash hook in ~/.claude/settings.json (not tracked).
+mkdir -p "$HOME/.claude/hooks" "$HOME/.claude/agents"
+ln -sfn "$HOME/.dotfiles/claude/hooks/gate-posts-on-behalf.sh" "$HOME/.claude/hooks/gate-posts-on-behalf.sh"
+ln -sfn "$HOME/.dotfiles/claude/agents/pr-review-subagent.md" "$HOME/.claude/agents/pr-review-subagent.md"
+
 mkdir -p "$HOME/.codex"
 ln -sfn "$HOME/.dotfiles/codex/AGENTS.md" "$HOME/.codex/AGENTS.md"
 

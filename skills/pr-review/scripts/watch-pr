@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Waits until a pull request moves, prints why, and exits.
+#
+#   watch-pr <owner/repo> <number> <head> <since> [base] [interval-seconds]
+#
+# The PR moves when it is no longer open, when its head is no longer <head>, when its base is no
+# longer [base] (the base at start when left out), or when someone other than the gh user (bots
+# excluded) comments or reviews after <since>. A failed poll is retried on the next interval, so a
+# network hiccup does not end the watch.
+set -euo pipefail
+
+if [[ $# -lt 4 ]]; then
+    echo "usage: watch-pr <owner/repo> <number> <head> <since> [base] [interval-seconds]" >&2
+    exit 64
+fi
+
+repo=$1 number=$2 head=$3 since=$4 base=${5:-} interval=${6:-300}
+me=$(gh api user --jq .login)
+if [[ -z $base ]]; then
+    base=$(gh api "repos/$repo/pulls/$number" --jq .base.ref)
+fi
+others=".[] | select(.user.login != \"$me\" and .user.type != \"Bot\")"
+
+latest_activity_by_others() {
+    {
+        gh api --paginate "repos/$repo/issues/$number/comments" --jq "$others | .created_at"
+        gh api --paginate "repos/$repo/pulls/$number/comments" --jq "$others | .created_at"
+        gh api --paginate "repos/$repo/pulls/$number/reviews" --jq "$others | select(.state != \"PENDING\") | .submitted_at"
+    } | sort | tail -n 1
+}
+
+while true; do
+    sleep "$interval"
+
+    pr=$(gh api "repos/$repo/pulls/$number" --jq '[.state, (.merged | tostring), .head.sha, .base.ref] | join(" ")') || continue
+    read -r state merged current_head current_base <<<"$pr"
+
+    if [[ $state != open ]]; then
+        if [[ $merged == true ]]; then
+            echo "merged: $repo#$number is merged"
+        else
+            echo "closed: $repo#$number is closed without a merge"
+        fi
+        exit 0
+    fi
+
+    if [[ $current_head != "$head" ]]; then
+        echo "new commits: $repo#$number moved from $head to $current_head"
+        exit 0
+    fi
+
+    if [[ $current_base != "$base" ]]; then
+        echo "new base: $repo#$number moved from $base to $current_base, head is still $head"
+        exit 0
+    fi
+
+    latest=$(latest_activity_by_others) || continue
+    if [[ $latest > $since ]]; then
+        echo "new activity: $repo#$number has a comment or review by someone else at $latest"
+        exit 0
+    fi
+done

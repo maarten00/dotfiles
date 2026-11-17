@@ -1,0 +1,124 @@
+#!/usr/bin/env python3
+"""Prints the production line count of a pull request and every risk trigger its diff hits.
+
+    risk-triggers <owner/repo> <number> [<old head>]
+
+The first line is always `production lines: N`, the added plus removed lines outside tests, docs,
+translations, seeders, factories and generated lockfiles. Comment lines and blank lines do not count and never hit a
+trigger, so a change to comments only comes out at 0. Every further line is one trigger hit. With
+<old head>, only what changed since that commit counts, a rebase included. That needs the base
+branch and the old head fetched in the current checkout. The triggers and why each one is there are
+in references/risk-hotspots.md. Repos without a section of their own get no triggers, only the count.
+"""
+import re
+import subprocess
+import sys
+from collections import Counter
+
+NOT_PRODUCTION = re.compile(
+    r"((^|/)(Tests|tests|IntegrationTests)/|Test\.php$|\.md$|(^|/)lang/"
+    r"|(^|/)[Dd]atabase/([Ss]eeders|[Ff]actories)/|^support/ApiDocs/|^docs/"
+    r"|(^|/)(composer\.lock|package-lock\.json|yarn\.lock|pnpm-lock\.yaml)$)"
+)
+MIGRATION = re.compile(r"(^|/)[Dd]atabase/[Mm]igrations/")
+# `#[` opens a PHP attribute such as #[Scope], which is code.
+COMMENT_OR_BLANK = re.compile(r"\s*(//|/\*|\*|#(?!\[)|$)")
+
+TRIGGERS = {
+    "exonet/backend": {
+        "access code": re.compile(
+            r"restrictForUser|restrictForContact|defaultScopes|#\[Scope\]|contactTransform|employeeRelations"
+            r"|->internal\(|advancedRequestValidators|ExistsThroughRepository|exists:|AclMiddleware"
+        ),
+        "migration that changes existing data": re.compile(
+            r"dropColumn|renameColumn|->change\(\)|DB::|->update\(|Schema::drop|dropIfExists|truncate"
+        ),
+        "sensitive path": re.compile(
+            r"^(Modules/(Auth|Finance|Secret|SecureMessage|Search|Webhooks|SupportToken|FrontPage)/"
+            r"|Modules/Core/Utilities/RepositoryBinding\.php$|Modules/Core/Validators/ExistsThroughRepository\.php$"
+            r"|Modules/Core/Repositories/AbstractCoreRepository\.php$"
+            r"|composer\.json$|package\.json$)"
+        ),
+    },
+}
+
+
+def run(command: list[str]) -> str:
+    return subprocess.run(command, capture_output=True, text=True, check=True).stdout
+
+
+def changed_lines_by_file(diff: str) -> dict[str, Counter]:
+    files: dict[str, Counter] = {}
+    old_path = current = None
+    for line in diff.splitlines():
+        if line.startswith("diff --git "):
+            old_path = current = None
+        elif line.startswith("--- "):
+            old_path = line[6:] if line.startswith("--- a/") else None
+        elif line.startswith("+++ "):
+            current = line[6:] if line.startswith("+++ b/") else old_path
+            if current is not None:
+                files.setdefault(current, Counter())
+        elif current is not None and line[:1] in "+-":
+            files[current][line] += 1
+    return files
+
+
+def since(new: dict[str, Counter], old: dict[str, Counter]) -> dict[str, Counter]:
+    delta = {}
+    for path in new.keys() | old.keys():
+        before, after = old.get(path, Counter()), new.get(path, Counter())
+        changed = (after - before) + (before - after)
+        if changed:
+            delta[path] = changed
+    return delta
+
+
+def code_lines(lines: Counter) -> Counter:
+    return Counter({line: count for line, count in lines.items() if not COMMENT_OR_BLANK.match(line[1:])})
+
+
+# A down() undoes its own up(), so the dropColumn or dropIfExists in it changes no existing data.
+def up_lines(lines: Counter) -> Counter:
+    up = Counter()
+    for line, count in lines.items():
+        if "function down" in line:
+            break
+        up[line] = count
+    return up
+
+
+def main() -> None:
+    if len(sys.argv) not in (3, 4):
+        sys.exit("usage: risk-triggers <owner/repo> <number> [<old head>]")
+    repo, number = sys.argv[1], sys.argv[2]
+
+    files = changed_lines_by_file(run(["gh", "pr", "diff", number, "-R", repo]))
+    if len(sys.argv) == 4:
+        base = run(["gh", "pr", "view", number, "-R", repo, "--json", "baseRefName", "--jq", ".baseRefName"]).strip()
+        old = changed_lines_by_file(run(["git", "diff", f"origin/{base}...{sys.argv[3]}"]))
+        files = since(files, old)
+
+    production = {
+        path: code
+        for path, lines in files.items()
+        if not NOT_PRODUCTION.search(path) and (code := code_lines(lines))
+    }
+    print(f"production lines: {sum(sum(lines.values()) for lines in production.values())}")
+
+    triggers = TRIGGERS.get(repo, {})
+    for path, lines in production.items():
+        if (sensitive := triggers.get("sensitive path")) and sensitive.search(path):
+            print(f"sensitive path: {path}")
+        text = "\n".join(line[1:] for line in lines)
+        if (access := triggers.get("access code")) and (match := access.search(text)):
+            print(f"access code: {path} ({match.group(0)})")
+        migration = triggers.get("migration that changes existing data")
+        if migration and MIGRATION.search(path):
+            up = "\n".join(line[1:] for line in up_lines(lines))
+            if match := migration.search(up):
+                print(f"migration that changes existing data: {path} ({match.group(0)})")
+
+
+if __name__ == "__main__":
+    main()

@@ -159,13 +159,22 @@ WHERE "Developer" LIKE '%<my user id>%'
 ## Reviewing GitHub PRs
 
 When reviewing a GitHub PR, follow the `pr-review` skill at
-`~/.claude/skills/pr-review/SKILL.md` — it covers checking the PR against its
-Notion ticket, leaning on CI instead of re-running tests, posting all findings as
-one grouped GitHub review, and the required language, style and mandatory
-"automated Claude comment" footnote for every comment. Load and apply it whenever
-you start reviewing a PR or drafting comments on one.
+`~/.claude/skills/pr-review/SKILL.md` — it covers the whole protocol: reading
+the base branch, PR body, links and Notion ticket, leaning on CI instead of
+re-running tests, the analysis, posting all findings as one pending GitHub
+review, re-checks, approving on my word, and the required language, labels and
+footnote for every comment. Load and apply it whenever you start reviewing a PR
+or drafting comments on one.
 
 The detail lives in the skill, not here, on purpose — see **Reply language**.
+
+## Posting on my behalf
+
+Everything posted to GitHub in my name — comments, reviews, replies, PR bodies —
+goes through the `post-on-behalf` skill at
+`~/.claude/skills/post-on-behalf/SKILL.md` first (voice pass and footer). A gate
+hook blocks raw `gh` posts whose body is not read from a `*.reviewed.md` (or
+`*.reviewed.json`) file that skill writes. Never work around the hook.
 
 ## Creating pull requests
 
@@ -173,8 +182,9 @@ When opening a GitHub pull request (or writing/updating its title or body),
 follow the `pull-request` skill at `~/.claude/skills/pull-request/SKILL.md` — it
 defines the title format (English, changelog-ready, `[EXO-XXXX]` tag), the Dutch
 body following the repo's PR template, how to describe testing, the optional
-Notion-ticket lookup, and the mandatory Claude-generated disclaimer. Load and
-apply it whenever you start drafting or opening a PR.
+Notion-ticket lookup, the mandatory Claude-generated disclaimer, and the
+`post-on-behalf` voice pass before `gh pr create`. Load and apply it whenever
+you start drafting or opening a PR.
 
 As with `pr-review`, the detail lives in the skill on purpose — see **Reply
 language**.
