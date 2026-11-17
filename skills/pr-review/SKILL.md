@@ -27,8 +27,8 @@ gh search prs --assignee=@me --state=open --draft=false --json url,number,title,
 ```
 
 Drop his own PRs, the ones that already carry a review of his, submitted or pending
-(`gh api repos/<owner>/<repo>/pulls/<n>/reviews`), and the ones another session is already on, which
-`mcp__ccd_session_mgmt__list_sessions` shows as a title starting with `R: [#<n>]`. Take the oldest
+(`gh api repos/<owner>/<repo>/pulls/<n>/reviews`), and the ones another session is already on: a `mcp__ccd_session_mgmt__list_sessions` row in the
+`Reviews` group (`group.name`) with that `prNumber`. Take the oldest
 PR that is left, and name the rest in one line of the report so he knows what still waits. When
 nothing is left, say so in one line and stop.
 
@@ -63,17 +63,19 @@ Run the protocol below as for any other PR, with these differences:
   threads sit open has missed the point.
 
 **Finding the session that wrote it.** Call `mcp__ccd_session_mgmt__list_sessions` with
-`limit: 50`. Keep the rows whose `cwd` is a checkout of the PR's repo and whose title does not start
-with `R:`, because those are review sessions. A row matches when its `prNumber` is the PR. With
-several matches, take the one with the latest `lastActivityAt`. Send it the message with
-`SendMessage`, `to` set to its `local_…` session id.
+`limit: 50`. Keep the rows whose `cwd` is a checkout of the PR's repo and whose `group.name` is not
+`Reviews`, because those are review sessions. A row without a `group` key is unknown: skip straight
+to the push search below. A row matches when its `prNumber` is the PR. With several matches, take
+the one with the latest `lastActivityAt`. Send it the message with `SendMessage`, `to` set to its
+`local_…` session id.
 
 When no row matches, search the transcripts with `mcp__ccd_session_mgmt__search_session_transcripts`
 for the push output of the head branch, `<headRefName> -> <headRefName>`. Only the session that
-pushed it has that line. Drop the `R:` rows and take the latest `lastActivityAt`. A session that
-builds a stack often stays bound to another PR of it, so the `prNumber` match misses it and the push
-search finds it. Never pick a session from its title, a tag or a branch name, and never ask him which
-one it is. Only when the search finds nothing either do the findings go to the chat.
+pushed it has that line. Drop the rows in the `Reviews` group and take the latest `lastActivityAt`.
+A session that builds a stack often stays bound to another PR of it, so the `prNumber` match misses
+it and the push search finds it. Never pick a session from its title, a tag or a branch name, and
+never ask him which one it is. Only when the search finds nothing either do the findings go to the
+chat.
 
 That session has none of this review's context, so the message stands on its own:
 
@@ -107,10 +109,11 @@ processed, and new findings or new threads from colleagues go to the same sessio
 ## Step 0 — Name the conversation and bind the PR
 
 As soon as a review request is recognised, resolve the real PR number and title, then set the
-session title to `R: [#<PR>] <PR title>`. Load the tool first:
+session title, without any prefix: the `Reviews` section below marks it as a review. A PR in
+`exonet/backend` gets `[#<PR>] <PR title>`. A PR in any other repo gets the repo name in front of the
+number, `[<repo>#<PR>] <PR title>` (`[frontend#126] …`), without the owner. Load the tool first:
 `ToolSearch select:mcp__ccd_session_mgmt__set_session_title`, then call it with
-`session_id: "self"`. Only when that tool is missing, hand him a `/rename R: [#<PR>] <title>` line.
-This makes review conversations findable in his sidebar later.
+`session_id: "self"`. Only when that tool is missing, hand him a `/rename` line with that title.
 
 Then file the session under the **Reviews** section of his sidebar. Load
 `ToolSearch select:mcp__ccd_sidebar__list_sections,mcp__ccd_sidebar__create_section,mcp__ccd_sidebar__move_sessions`,
@@ -756,7 +759,7 @@ Try once, and move on. Never retry a dead MCP server in a loop and never stall w
 | The gate hook lets something through | That is not permission. The rules stand on their own. |
 | The `code-comments` skill is absent | Apply the rule directly: a comment earns its place when it explains non-obvious local logic or a WHY. |
 | The `pr-review-subagent` agent type is absent | Use the default type and say so in the report. |
-| The session-title tool is absent | Hand him a `/rename R: [#<PR>] <title>` line. |
+| The session-title tool is absent | Hand him a `/rename` line with the title from step 0. |
 | The `ccd_sidebar` tools are absent | Skip filing the session under Reviews. |
 | `bind_pr` refuses the PR, or the `ccd_pr` tools are absent | Go on without it. Say in the report that this session will not archive itself when the PR merges. |
 | `PushNotification` or `set_unread` is absent | Skip it; the report's last line still carries the next action. |
