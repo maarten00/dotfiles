@@ -1,6 +1,6 @@
 ---
 name: pull-request
-description: "Rules for writing a GitHub pull request: discover and preserve the repository-specific PR template, then write a concise title and body using the repository's conventions. Load this whenever you are about to draft, open, or update a PR — e.g. 'open a PR', 'gh pr create', 'write the PR description', 'update the pull request body'. These rules govern the PR title and body text only; they do NOT change the language of normal chat replies."
+description: "Rules for writing a GitHub pull request: discover and preserve the repository-specific PR template, then write a concise title and body using the repository's conventions, and optionally hand the opened PR to a self-review in its own session. Load this whenever you are about to draft, open, or update a PR — e.g. 'open a PR', 'gh pr create', 'write the PR description', 'update the pull request body'. These rules govern the PR title and body text only; they do NOT change the language of normal chat replies."
 ---
 
 
@@ -146,3 +146,43 @@ Always end the body with a disclaimer marking the description as AI-generated. A
     🤖 _Deze PR-omschrijving is gegenereerd door een AI-assistent._
 
 This disclaimer is mandatory on every PR body — never omit it.
+
+## Self-review in its own session (optional)
+
+Once the draft PR is open, offer a self-review in a separate session. The `pr-review` skill
+recognises his own PR, skips the pending review, and sends its findings, plus any open threads from
+colleagues, back to the session that wrote the PR with `SendMessage`. That is this session, so the
+fixes happen here, with the context of how the change came about. Only in the desktop app, where
+`mcp__ccd_session__start_session` exists; elsewhere, close with one line that `/pr-review <PR URL>`
+in a new session does the same.
+
+1. Bind this session to the PR (`mcp__ccd_pr__get_status`, then `bind_pr` when it does not report
+   it). `pr-review` finds the writing session by its `prNumber`.
+2. Call `start_session`:
+   - `initiation: "user_asked"` when his request asked for a self-review, otherwise
+     `"own_initiative"`: a card he starts with one click, so nothing runs unasked.
+   - `context: "fresh"`, so the review reads the diff without this conversation's assumptions, and
+     `use_worktree: false`, since it only reads. Leave `model` unset: a review needs Opus.
+   - `prompt`: `/pr-review <PR URL>`, plus one line that this is his own PR and the findings go to
+     the session that opened it.
+3. When the findings arrive, check each one against the code before changing anything: a finding is
+   a claim, not proof. Fix what holds, one signed commit per issue (see "Fixing PR issues" in
+   `~/.claude/CLAUDE.md`), and run the narrowest checks. Commit and push without waiting for his
+   go, draft or not: the comment of step 4 is where he reviews them. Replies to colleague threads
+   that came along are drafts until he says to post them.
+4. After the push, post one PR comment (`gh pr comment`, through `post-on-behalf`) as the record of
+   what the self-review changed, so he can judge each fix later and revert the ones he does not
+   like:
+   - per fixed finding: its severity label, what was wrong in one line, and the commit as a link
+     (`<owner>/<repo>@<sha>` renders as one);
+   - per rejected finding: one line with what it claimed and why it does not hold;
+   - the head SHA the review read.
+
+   Language and voice follow the PR body. One comment per round, never an edit of an earlier one.
+5. Send the rejected findings and the reasons back to the review session (`SendMessage`, its id from
+   the `start_session` result), so its re-check does not flag them again.
+
+The review session keeps watching the PR. After a push it re-checks by itself and sends anything new
+here, so never start a second review for the same PR. Auto-fix at most two rounds: findings from a
+third round go to him in the chat, with the fixes drafted but not committed, so the review and the
+fixes cannot keep feeding each other.
