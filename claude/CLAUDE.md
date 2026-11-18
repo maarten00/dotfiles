@@ -76,8 +76,13 @@ decide, since only I can change the effort level.
 
 When naming a level, give both the desktop-app label and the CLI value, since I
 use both: Low (`low`), Medium (`medium`), High (`high`), Extra (`xhigh`),
-Max (`max`) — e.g. "switch to Extra (`/effort xhigh`)". You usually can't see the
-current level, so don't guess it; name the level the task needs ("this needs at
+Max (`max`) — e.g. "switch to Extra (`/effort xhigh`)".
+
+Before suggesting a switch, read the current level; never guess it. In the
+desktop app, call `mcp__ccd_session_mgmt__get_session` with `"self"` and use
+its `effort` field. Elsewhere, run `echo "$CLAUDE_EFFORT"`. If the session
+already runs at the level the task needs, say nothing and carry on. Only when
+neither source gives a level, name the level the task needs ("this needs at
 least Extra (`xhigh`)") and I'll judge whether I'm already there.
 
 ## Mark where the answer starts
