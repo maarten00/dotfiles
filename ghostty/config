@@ -44,3 +44,8 @@ keybind = ctrl+k=goto_split:up
 keybind = ctrl+l=goto_split:right
 #conflicts with nano cut text
 keybind = ctrl+k=unbind
+
+# =========================
+# Clipboard
+# =========================
+keybind = super+v=paste_from_clipboard
